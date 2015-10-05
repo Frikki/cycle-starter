@@ -1,4 +1,3 @@
-const {Rx} = require(`@cycle/core`)
 const {h} = require(`@cycle/dom`)
 const latestObj = require(`rx-combine-latest-obj`)
 const {filterLinks} = require(`cycle-history`)
@@ -6,7 +5,6 @@ const {getUrl, extractValue} = require(`../../utils`)
 const styles = require(`./Navbar.styl`)
 
 const intent = ( { DOM } ) => ({
-  scroll$: Rx.Observable.fromEvent(document, `scroll`),
   click$: DOM
     .select(`.${styles.link}`)
     .events(`click`)
@@ -19,19 +17,11 @@ const intent = ( { DOM } ) => ({
 
 const model = ({
   click$,
-  scroll$,
 }, { History } ) => latestObj({
 
   url: click$
     .map(getUrl)
     .startWith(History.value.pathname),
-
-  isScrolled: scroll$.map(e => {
-    if (e.target.scrollTop > 200) {
-      return true
-    }
-    return false
-  }),
 
 }).distinctUntilChanged()
 

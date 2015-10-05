@@ -4,7 +4,7 @@ var path = require('path');
 
 var webpackConfig = {
 
-  entry: './src/clientBundle.js',
+  entry: './src/app.js',
 
   output: {
     filename: 'app.js',

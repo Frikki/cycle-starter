@@ -5,7 +5,7 @@ var path = require('path');
 var webpackConfig = {
   watch: false,
   devtool: 'sourcemap',
-  entry: './src/dev.client.js',
+  entry: './src/app.dev.js',
 
   output: {
     filename: 'app.js',

@@ -4,7 +4,7 @@
   "description": "Simple setup for cycle.js",
   "main": "",
   "scripts": {
-    "build-jade": "./node_modules/.bin/jade ./src/index.jade -o ./dist/dev",
+    "build-jade": "./node_modules/.bin/jade ./src/index.jade -o ./dist/dev/",
     "build-js": "./node_modules/.bin/webpack --progress --colors",
     "build": "npm run build-jade && npm run build-js",
     "watch-jade": "./node_modules/.bin/nodemon --watch ./src/app/index.jade --exec 'npm run build-jade'",
@@ -33,10 +33,11 @@
     "css-loader": "^0.19.0",
     "cssnext-loader": "^1.0.1",
     "cycle-history": "^0.3.4",
-    "eslint": "^1.0.0",
+    "eslint": "1.0.x",
     "eslint-config-cycle": "^3.0.0",
     "eslint-plugin-cycle": "^1.0.1",
     "eslint-plugin-no-class": "^0.1.0",
+    "extract-text-webpack-plugin": "^0.8.2",
     "jade": "^1.11.0",
     "node-noop": "0.0.1",
     "nodemon": "^1.7.1",
@@ -50,8 +51,10 @@
     "@cycle/dom": "^5.3.0",
     "cycle-history": "^0.3.5",
     "cycle-local-storage": "^1.0.0",
+    "express": "^4.13.3",
     "gsap": "^1.18.0",
     "rx-combine-latest-obj": "^1.0.2",
-    "switch-path": "^1.1.0"
+    "switch-path": "^1.1.0",
+    "virtual-dom": "^2.1.1"
   }
 }
