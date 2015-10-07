@@ -24,6 +24,13 @@ var webpackConfig = {
     ]
   },
 
+  resolve: {
+    alias: {
+      "utils": path.resolve('./src/utils'),
+      "dialogue": path.resolve('./src/dialogue'),
+    }
+  },
+
   plugins: [
     new Extract('styles.css', {allChunks: true})
   ],

@@ -2,7 +2,7 @@ let {Rx, run} = require(`@cycle/core`)
 let express = require(`express`)
 let {h, makeHTMLDriver} = require(`@cycle/dom`)
 let {makeServerHistoryDriver} = require(`cycle-history`)
-let {Main} = require(`./dialogue/Main`)
+let {Main} = require(`dialogue/Main`)
 
 function wrapVTreeWithHTMLBoilerplate(vtree) {
   return h(`html`, [
@@ -39,6 +39,7 @@ let server = express()
 // In production you should allow a web server
 // like NGINX handle static files.
 server.use(`/dist`, express.static(`dist`))
+server.use(`/static`, express.static(`static`))
 
 server.use(function cycleServer(req, res) {
   // Ignore favicon requests

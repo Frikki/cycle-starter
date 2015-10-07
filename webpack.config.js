@@ -14,8 +14,12 @@ var webpackConfig = {
 
   module: {
     loaders: [
-      { test: /\.js$/, loaders: ['babel-loader'], exclude: /node_modules/},
-      { test: /\.styl$/, loader: Extract.extract('style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!cssnext-loader!stylus-loader') }
+      { test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      },
+      { test: /\.styl$/,
+        loader: Extract.extract('style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!cssnext-loader!stylus-loader') }
     ]
   },
 
@@ -23,6 +27,13 @@ var webpackConfig = {
     modulesDirectories: [
       path.resolve('./node_modules')
     ]
+  },
+
+  resolve: {
+    alias: {
+      "utils": path.resolve('./src/utils'),
+      "dialogue": path.resolve('./src/dialogue'),
+    }
   },
 
   plugins: [

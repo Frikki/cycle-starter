@@ -1,54 +1,43 @@
-const {h} = require(`@cycle/dom`)
-const latestObj = require(`rx-combine-latest-obj`)
-const {filterLinks} = require(`cycle-history`)
-const {getUrl, extractValue} = require(`../../utils`)
-const styles = require(`./Navbar.styl`)
+import {h} from '@cycle/dom'
+import latestObj from 'rx-combine-latest-obj'
+import styles from './navbar.styl'
+import mainStyles from 'dialogue/Main/main.styl'
 
-const intent = ( { DOM } ) => ({
-  click$: DOM
-    .select(`.${styles.link}`)
-    .events(`click`)
-    .merge(
-      DOM
-        .select(`.${styles.link}`)
-        .events(`touchstart`)
-    ).filter(filterLinks),
+const intent = ({DOM}) => ({
+  scroll$: DOM
+    .select(`.${mainStyles.contentContainer}`)
+    .events(`scroll`),
 })
 
 const model = ({
-  click$,
-}, { History } ) => latestObj({
+  scroll$,
+}) => latestObj({
+  isScrolled: scroll$
+    .map(e => e.target.scrollTop > 70 === true)
+    .startWith(false),
+})
 
-  url: click$
-    .map(getUrl)
-    .startWith(History.value.pathname),
-
-}).distinctUntilChanged()
-
-const view = state$ => state$.map(
-  ({ }) => h(`div`, {className: styles.navbar}, [
-    h(`button`, {className: styles.menu}, [`Menu`, `+`]),
+const view = state$ => state$.map(({
+  isScrolled,
+}) =>
+  h(`div`,
+  {
+    className: isScrolled ? styles.scrolled : styles.navbar,
+  },
+  [
     h(`h1`, {className: styles.title}, [`Cycle-Starter`]),
     h(`span`),
-    h(`ul.${styles.list}`, [
-      h(`li.${styles.item}`, [
-        h(`a.${styles.link}`, {href: `/`}, `Home`),
-      ]),
-      h(`li.${styles.item}`, [
-        h(`a.${styles.link}`, {href: `/about`}, `About Me`),
-      ]),
-    ]),
-  ]
-)).distinctUntilChanged()
+  ])
+)
 
-function Navbar(responses) {
+const Navbar = responses => {
   const actions = intent(responses)
-  const state$ = model(actions, responses)
+  const state$ = model(actions)
   const view$ = view(state$)
   return {
     DOM: view$,
-    url$: extractValue(`url`, state$),
   }
 }
 
 export default Navbar
+export {Navbar}

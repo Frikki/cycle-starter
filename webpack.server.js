@@ -31,6 +31,13 @@ var webpackConfig = {
 
   externals: nodeModules,
 
+  resolve: {
+    alias: {
+      "utils": path.resolve('./src/utils'),
+      "dialogue": path.resolve('./src/dialogue'),
+    }
+  },
+
   plugins: [
     new Extract('styles.css', {allChunks: true})
     //new Webpack.NormalModuleReplacementPlugin(/\.styl$/, 'node-noop'),
