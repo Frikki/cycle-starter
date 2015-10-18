@@ -46,14 +46,13 @@
     "webpack-dev-server": "^1.12.0"
   },
   "dependencies": {
-    "@cycle/core": "^3.1.0",
-    "@cycle/dom": "^5.3.0",
-    "cycle-history": "^0.3.5",
-    "cycle-local-storage": "^1.0.0",
+    "@cycle/core": "^4.x.x",
+    "@cycle/dom": "6.x.x",
+    "cycle-history": "^0.4.x",
+    "cycle-local-storage": "^1.2.x",
     "express": "^4.13.3",
     "gsap": "^1.18.0",
     "hyperscript-helpers": "^2.0.0",
-    "lodash-fp": "^0.10.2",
     "rx-combine-latest-obj": "^1.0.2",
     "switch-path": "^1.1.0",
     "virtual-dom": "^2.1.1"
