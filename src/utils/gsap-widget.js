@@ -1,4 +1,4 @@
-const {h, create} = require(`virtual-dom`)
+import {h, create} from 'virtual-dom'
 try {
   var TweenMax = require(`../../node_modules/gsap/src/uncompressed/TweenMax`) // eslint-disable-line
 } catch (e) {
@@ -30,10 +30,11 @@ GSAPWidget.prototype.init = function init() {
     if (this.from) {
       TweenMax.fromTo(div, this.time, this.from, this.to)
     } else {
-      TweenMax.fromTo(div, this.time, this.from, this.to)
+      TweenMax.to(div, this.time, this.to)
     }
     return div
   } catch(e) {
+    // Server-side
     return _div
   }
 }

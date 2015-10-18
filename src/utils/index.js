@@ -1,4 +1,4 @@
-/* global location, require */
+/* global location */
 import {Rx} from '@cycle/core'
 
 const getUrl = event => {
@@ -13,8 +13,11 @@ const events = (selector, _events) => {
   )
 }
 
+const dot = className => `.${className}`
+
 export {
   getUrl,
   extractValue,
-  events
+  events,
+  dot,
 }

@@ -1,7 +1,8 @@
-let {h} = require(`@cycle/dom`)
+import {h} from '@cycle/dom'
+import Home from 'dialogue/Home'
 
 const routes = {
-  '/': h(`h1`, {}, `Hello, world!`),
+  '/': Home,
   '/docs': h(`h1`, {}, `Docs`),
   '*': h(`h1`, `Page could not be found`),
 }

@@ -6,7 +6,7 @@ const {Main} = require(`dialogue/Main`)
 function clientSideApp(responses) {
   let requests = Main(responses)
   requests.History = requests.History.skip(1)
-  requests.DOM = requests.DOM.skip(1)
+  //requests.DOM = requests.DOM.skip(1)
   return requests
 }
 

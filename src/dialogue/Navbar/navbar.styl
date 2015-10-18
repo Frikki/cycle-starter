@@ -1,45 +1,28 @@
 $primaryColor = rgb(0, 120, 255)
-$stickyValue = 50px
 
 .navbar
-  z-index: 1;
+  z-index: 100;
+  position: fixed
+  top: 0
   height: 4em;
   line-height: 4em;
-  background-color: #efefef
-  margin-top: $stickyValue
+  background-color: transparent
   width: 100%
-  transition: all 0.016s linear
+  padding-top: 50px
+  transition: all 0 linear
+
+  ~ div
+    padding-top: calc(50px + 4em)
 
 .title
   order: 1;
   padding: 0;
   font-size: 2em
-  transform: translate3d(2.5em, 0, 0)
+  transform: translate3d(.5em, 0, 0)
   margin: 0;
   color: $primaryColor
-  trasition: all 0.3s ease-in-out
+  trasition: all 0 linear
 
 span
   order: 2;
   flex-grow: 1;
-
-.scrolled
-  composes: navbar
-  z-index: 100
-  background-color: $primaryColor
-  border-left: solid 1px rgba(0,0,0,0.3)
-  border-bottom: solid 1px rgba(0,0,0,0.3)
-  position: fixed
-  margin: 0
-  margin-bottom: 100px
-
-  ~ div
-    padding-top: calc(70px + 4em)
-
-  .title
-    font-size: 1.25em
-    transform: translate3d(1em, 0, 0) scale(1)
-    color: #efefef
-
-  .link
-    color: $primaryColor

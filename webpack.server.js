@@ -25,7 +25,7 @@ var webpackConfig = {
   module: {
     loaders: [
       { test: /\.js$/, loaders: ['babel-loader'], exclude: /node_modules/},
-      { test: /\.styl$/, loader: Extract.extract('style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!cssnext-loader!stylus-loader') }
+      { test: /\.styl$/, loader: Extract.extract('style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!autoprefixer-loader!cssnext-loader!stylus-loader') }
     ]
   },
 

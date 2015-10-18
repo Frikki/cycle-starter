@@ -19,7 +19,7 @@ var webpackConfig = {
         exclude: /node_modules/
       },
       { test: /\.styl$/,
-        loader: Extract.extract('style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!cssnext-loader!stylus-loader') }
+        loader: 'style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!autoprefixer-loader!cssnext-loader!stylus-loader' }
     ]
   },
 
@@ -37,7 +37,7 @@ var webpackConfig = {
   },
 
   plugins: [
-    new Extract('styles.css', {allChunks: true})
+    //new Extract('styles.css', {allChunks: true})
   ],
 
   devServer: {

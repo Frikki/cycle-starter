@@ -1,3 +1,4 @@
+import {Rx} from '@cycle/core'
 import {h} from '@cycle/dom'
 import latestObj from 'rx-combine-latest-obj'
 import switchPath from 'switch-path'
@@ -12,9 +13,15 @@ function validateValue([zero, one]) {
   return zero
 }
 
-function getRouteValue(location) {
-  const {value} = switchPath(location.pathname, routes)
-  return value
+function createRouteValue(DOM, History) {
+  return function getRouteValue(location) {
+    const {value} = switchPath(location.pathname, routes)
+    if (typeof value === `function`) {
+      const dialogue = value({DOM, History})
+      return dialogue
+    }
+    return value
+  }
 }
 
 const enterOptions = {
@@ -49,32 +56,53 @@ const exitOptions = {
 }
 
 const model = ({
+  DOM,
   History,
-}) => latestObj({
-  routeValue: History
-    .map(getRouteValue)
-    .startWith(null)
-    .pairwise(),
-}).distinctUntilChanged()
+}) => {
+  const childView$ = History
+    .map(createRouteValue(DOM,History))
+
+  return latestObj({
+
+    routeValue: childView$
+      .flatMap(value => {
+        if (value.DOM) {
+          return value.DOM
+        }
+        return Rx.Observable.just(value)
+      })
+      .startWith(null)
+      .pairwise(),
+
+    routeTitle: childView$
+      .flatMap(value => {
+        if (value.title$) {
+          return value.title$
+        }
+        return Rx.Observable.just(`Cycle-Starter`)
+      }),
+
+  }).distinctUntilChanged()
+}
 
 const view = state$ => state$.map(({
   routeValue,
 }) =>
-  h(`div`, {
+  h(`div`,
+    {
       className: styles.content,
-    }, [
-        h(`div`, {} ,[
-          GSAP(exitOptions, [
-            validateValue(routeValue),
-          ]),
-          GSAP(enterOptions, [
-            routeValue[1],
-          ]),
+    },
+    [
+      h(`div`, {},
+      [
+        GSAP(exitOptions, [
+          validateValue(routeValue),
         ]),
-        h(`div`, {
-          style: {height: `500rem`},
-        }, []),
-      ]
+        GSAP(enterOptions, [
+          routeValue[1],
+        ]),
+      ]),
+    ]
   )).distinctUntilChanged()
 
 const Content = responses => {
@@ -82,6 +110,7 @@ const Content = responses => {
   const view$ = view(state$)
   return {
     DOM: view$,
+    title$: state$.pluck(`routeTitle`),
   }
 }
 

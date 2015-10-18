@@ -1,24 +1,29 @@
 import {h} from '@cycle/dom'
 import latestObj from 'rx-combine-latest-obj'
 import {filterLinks} from 'cycle-history'
-import {getUrl, extractValue, events} from 'utils'
+import {getUrl, extractValue, events, dot} from 'utils'
 import styles from './sidebar.styl'
+const {
+  div,
+  span,
+  ul,
+  li,
+  a,
+} = require(`hyperscript-helpers`)(h)
 
 const intent = ({DOM}) => ({
-  hover$: events(DOM.select(`.${styles.sidebar}`), [
+  hover$: events(DOM.select(dot(styles.sidebar)), [
     `mouseenter`,
     `touchstart`,
     `mouseleave`,
   ]),
 
-  click$: DOM
-    .select(`.${styles.link}`)
-    .events(`click`)
-    .merge(
-      DOM
-        .select(`.${styles.link}`)
-        .events(`touchstart`),
-    ).filter(filterLinks),
+  click$: events(
+    DOM.select(dot(styles.link)), [
+      `click`,
+      `touchstart`,
+    ])
+    .filter(filterLinks),
 })
 
 const model = ({
@@ -37,30 +42,23 @@ const model = ({
   url: click$
     .map(getUrl)
     .startWith(History.value.pathname),
+
 }).distinctUntilChanged()
 
 const view = state$ => state$.map(({
   isHovered,
 }) =>
-  h(`div`,
-  {
+  div({
     className: isHovered ? styles.pinned : styles.sidebar,
   }, [
-    h(`span`,
-      {className: styles.menuIcon},
-      []
-    ),
-    h(`div`, {
-      className: styles.menu,
-    }, [
-      h(`ul`, {
-        className: styles.list,
-      }, [
-        h(`li.${styles.item}`, [
-          h(`a`, {href: `/`, className: styles.link}, [`Home`]),
+    span(dot(styles.menuIcon)),
+    div(dot(styles.menu), {}, [
+      ul(dot(styles.list), {}, [
+        li(dot(styles.item), [
+          a(dot(styles.link), {href: `/`}, [`Home`]),
         ]),
-        h(`li.${styles.item}`, [
-          h(`a`, {href: `/docs`, className: styles.link}, [`Docs`]),
+        li(dot(styles.item), [
+          a(dot(styles.link), {href: `/docs`}, [`Docs`]),
         ]),
       ]),
     ]),
