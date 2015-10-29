@@ -60,15 +60,15 @@ function makeDOMDriver(container, modules = [
         rootElem.appendChild(renderContainer);
         patch(renderContainer, view);
         return Observable.just(rootElem);
-      }).subscribe(rootElement => rootElem$.onNext(rootElement));
-
-    view$
-      .flatMapLatest(parseTree)
-      .pairwise()
-      .flatMap(view => {
-        patch(view[0], view[1]);
-        return Observable.just(rootElem);
-      }).subscribe(rootElement => rootElem$.onNext(rootElement));
+      })
+      .concat(view$
+        .flatMapLatest(parseTree)
+        .pairwise()
+        .flatMap(view => {
+          patch(view[0], view[1]);
+          return Observable.just(rootElem);
+        }))
+      .subscribe(rootElement => rootElem$.onNext(rootElement));
 
     return {
       select: makeElementSelector(rootElem$),
