@@ -5,77 +5,71 @@ import { Observable } from 'rx';
 // InputCount component
 function InputCount(sources) {
   const id = `.component-count`;
+  const initialValue$ = sources.value$.take(1);
+  const newValue$ = sources.DOM
+    .select(id)
+    .events(`input`)
+    .map(ev => ev.target.value);
+  const value$ = initialValue$.concat(newValue$);
 
-  function intent({ DOM }) {
-    return {
-      value$: DOM
-        .select(id)
-        .events(`input`)
-        .map(ev => ev.target.value),
-    };
-  }
-
-  function model({ props$, actions }) {
-    const initialValue$ = props$.map(props => props.value).take(1);
-    return initialValue$.concat(actions.value$).map(value => ({value}));
-  }
-
-  function view(state$) {
-    return state$.map(
-      (state) => h(`input${id}`, {
-        type: `range`,
-        max: `1000`,
-        min: `1`,
-        value: state.value,
+  return {
+    DOM: value$.map(
+      (value) => h(`input${id}`, {
+        props: {
+          type: `range`,
+          max: `512`,
+          min: `1`,
+          value,
+        },
         style: {
           width: `100%`,
         },
       })
-    );
-  }
-
-  const actions = intent(sources);
-  const state$ = model({props$: sources.props$, actions});
-
-  return {
-    DOM: view(state$),
-    state$: state$,
+    ),
+    value$,
   };
 }
 
-// Silly component
-function Silly(id) {
+// CycleJSLogo component
+function CycleJSLogo(id) {
   return {
-    DOM: Observable.of(
+    DOM: Observable.just(
       h(`div`, {
         style: {
-          border: `1px solid rgb(221, 221, 221)`,
-          display: `inline-block`,
+          alignItems: `center`,
+          background: `url(http://cycle.js.org/img/cyclejs_logo.svg)`,
+          boxSizing: `border-box`,
+          display: `inline-flex`,
+          fontFamily: `sans-serif`,
+          fontWeight: `700`,
+          fontSize: `8px`,
+          height: `32px`,
+          justifyContent: `center`,
           margin: `8px`,
-          padding: `8px`,
+          width: `32px`,
         },
-      }, `Silly Component #${id}`)
+      }, [`${id}`])
     ),
   };
 }
 
-// MAIN
+// Main
 function Main(sources) {
   const inputCount = InputCount({
-    DOM: sources.DOM, props$: Observable.of({value: 10}),
+    DOM: sources.DOM, value$: Observable.just(64),
   });
 
-  const component$s$ = inputCount.state$.map(
-    (state) => Array.apply(null, Array(parseInt(state.value)))
-        .map((v, i) => Silly(i + 1).DOM)
+  const component$s$ = inputCount.value$.map(
+    (value) => Array.apply(null, Array(parseInt(value)))
+        .map((v, i) => CycleJSLogo(i + 1).DOM)
   );
 
   return {
-    DOM: inputCount.state$.combineLatest(
+    DOM: inputCount.value$.combineLatest(
       inputCount.DOM,
       component$s$,
-      (state, inputCountVTree, componentDOMs) => h(`div`, [
-        h(`h2`, `# of Silly Components: ${state.value}`),
+      (value, inputCountVTree, componentDOMs) => h(`div`, [
+        h(`h2`, `# of Components: ${value}`),
         inputCountVTree,
         h(`div`, componentDOMs),
       ])

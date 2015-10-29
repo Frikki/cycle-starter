@@ -61,7 +61,7 @@ function makeDOMDriver(container, modules = [
         patch(renderContainer, view);
         return Observable.just(rootElem);
       }).subscribe(rootElement => rootElem$.onNext(rootElement));
-    
+
     view$
       .flatMapLatest(parseTree)
       .pairwise()
@@ -69,7 +69,6 @@ function makeDOMDriver(container, modules = [
         patch(view[0], view[1]);
         return Observable.just(rootElem);
       }).subscribe(rootElement => rootElem$.onNext(rootElement));
-
 
     return {
       select: makeElementSelector(rootElem$),

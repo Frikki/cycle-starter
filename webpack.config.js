@@ -9,7 +9,6 @@ var webpack      = require('webpack'),
 var JSLoader = {
   test: /\.js$/,
   loaders: [
-    'flowcheck-loader',
     'babel-loader'
   ],
   exclude: /node_modules/
